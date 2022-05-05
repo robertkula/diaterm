@@ -4,7 +4,9 @@
   "description": "Web Terminal Admin",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
   },
   "keywords": [
     "terminal",
@@ -14,5 +16,18 @@
     "react"
   ],
   "author": "Bobby Kula",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3",
+    "node-pty": "^0.10.1",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.5.0",
+    "ssh2": "^1.9.0",
+    "xterm": "^4.18.0",
+    "xterm-addon-fit": "^0.5.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
+  }
 }
