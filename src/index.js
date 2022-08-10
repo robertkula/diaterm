@@ -9,12 +9,17 @@ document.addEventListener("DOMContentLoaded", function () {
   let containerElement = document.getElementById("terminal-container");
   terminal.open(containerElement);
   fitAddon.fit();
+  let lsButton = document.getElementById("command-ls");
+  lsButton.addEventListener("click", function () {
+    console.log("button clicked");
+    sendLS();
+  });
 });
 
 const socket = io();
 
 socket.on("connect", function () {
-  terminal.write("\r\n*** Disconnected from server ***\r\n");
+  terminal.write("\r\n*** Connected to server ***\r\n");
 });
 
 terminal.onKey(function (ev) {
@@ -23,8 +28,25 @@ terminal.onKey(function (ev) {
 
 socket.on("data", function (data) {
   terminal.write(data);
+  console.log(data);
 });
 
 socket.on("disconnect", function () {
   terminal.write("\r\n*** Disconnected from server ***\r\n");
 });
+
+console.log("running");
+
+function sendLS() {
+  let lsUrl = window.location.href + "ls";
+  fetch(lsUrl, {
+    method: "POST",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
