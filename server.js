@@ -21,14 +21,26 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-function expect(waitFor) {
+function expect(waitFor, skipFirst) {
   return new Promise((resolve) => {
-    connStream.on("data", function (data) {
+    let result = "";
+    let waitForData = function (data) {
       let dataString = data.toString("binary");
-      if (dataString.endsWith(waitFor)) {
-        resolve(dataString);
+      console.log(`data is {${dataString}}`);
+      if (dataString.endsWith("\r\n")) {
+        dataString = dataString.slice(0, -2);
       }
-    });
+      if (skipFirst && dataString.startsWith(skipFirst)) {
+        console.log("skipping first");
+        skipFirst = false;
+      } else if (dataString.endsWith(waitFor)) {
+        connStream.off("data", waitForData);
+        resolve(result);
+      } else {
+        result += dataString;
+      }
+    };
+    connStream.on("data", waitForData);
   });
 }
 
@@ -38,7 +50,8 @@ function send(command) {
 
 async function ls() {
   send("ls");
-  let result = await expect("$ ");
+  let result = await expect("$ ", "ls");
+  console.log(`result is\n{${result}}`);
   return { result: result };
 }
 
@@ -52,7 +65,10 @@ io.on("connection", function (socket) {
     .on("ready", () => {
       conn.shell((err, stream) => {
         connStream = stream;
-        if (err) throw err;
+        if (err) {
+          socket.emit("data", "cannot cannot to ssh server");
+          return;
+        }
         stream
           .on("close", () => {
             console.log("Stream :: close");

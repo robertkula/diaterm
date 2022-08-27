@@ -35,8 +35,6 @@ socket.on("disconnect", function () {
   terminal.write("\r\n*** Disconnected from server ***\r\n");
 });
 
-console.log("running");
-
 function sendLS() {
   let lsUrl = window.location.href + "ls";
   fetch(lsUrl, {
