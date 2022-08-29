@@ -19,6 +19,7 @@
   "author": "Bobby Kula",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.1",
     "express": "^4.17.3",
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.5.0",

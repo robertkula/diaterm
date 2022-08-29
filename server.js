@@ -1,4 +1,4 @@
-var os = require("os");
+require("dotenv").config();
 const { Client } = require("ssh2");
 const express = require("express");
 const app = express();
@@ -9,7 +9,7 @@ const io = require("socket.io")(http, {
   },
 });
 
-let port = 8000;
+let port = process.env.PORT;
 
 const conn = new Client();
 let connStream;
