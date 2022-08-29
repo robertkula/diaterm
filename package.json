@@ -7,7 +7,7 @@
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "start-ssh": "docker compose up -d"
+    "start-ssh": "docker info > /dev/null 2>&1 && docker compose up -d || echo docker is not running"
   },
   "keywords": [
     "terminal",
